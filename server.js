@@ -1,5 +1,4 @@
 const mysql = require('mysql2');
-const inquirer = require("inquirer");
 const express = require('express')
 
 const PORT = process.env.PORT || 3001;
@@ -8,8 +7,12 @@ const PORT = process.env.PORT || 3001;
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    database: 'employee_db',
+    database: 'employees_db',
     password : 'codingiskewl'
 })
 
+
+app.listen(PORT, () =>
+  console.log(`Example app listening at http://localhost:${PORT}`)
+);
     
