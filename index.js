@@ -5,6 +5,7 @@ const console_table = require("console.table");
 const Stranger = require("./db/index.js");
 const connection = require("./db/connections");
 const { allowedNodeEnvironmentFlags } = require('process');
+const { doesNotMatch } = require('assert');
 
 const strangerThings = new Stranger(connection())
 
@@ -23,7 +24,7 @@ function loadQ(){
           name: 'action',
           message: 'What would you like to do?', 
           choices: ["View all employees", "Add employee", "Update employee role",
-                    "View all roles", "Add role", "View all departments", "Add department"],
+                    "View all roles", "Add role", "View all departments", "Add department", "quit"],
         },
       ]).then((data)=>{
         switch(data.aciton){
@@ -51,6 +52,8 @@ function loadQ(){
             case "Add department":
                 addDepartment()
                 break
+            case "quit":
+               //unlink db
         }
       }) 
 
@@ -72,11 +75,11 @@ function addEmployee(){
         {
             type: "input",
             name: "roleid",
-            message: "What is the role id?"
+            message: "What is the role id?" //list
         },
         {
             type: "input",
-            name: "manageridid",
+            name: "manageridid", //list
             massage: "What is the manager id?"
         },
     ] ).then((data) => {
@@ -88,8 +91,55 @@ function addEmployee(){
 }
 
 function updateEmpRole(){
-    
+    inquirer
+    .prompt([
+        {
+           type: "list" ,
+           name: "whichEmployee", //list
+           message: "Which eployees role do you want to update?"
+        },
+        {
+            type: "input",
+            name: "updateRole", //list
+            massage: "What is the emploees new role?"
+        },
+    ] ).then((data) => {
+        strangerThings.updateRole(date.whichEmployee, data.updateRole)
+        console.log("role updated")
+
+        loadQ()
+    })
 }
+
+function addRole(){
+    inquirer
+    .prompt([
+        {
+           type: "input" ,
+           name: "title",
+           message: "What is the  name of the role?"
+        },
+        {
+            type: "input",
+            name: "salary",
+            message: "What is the salary for the role?"
+        },
+        {
+            type: "input",
+            name: "department_id",
+            message: "What is the department for the role?" //list
+        },
+    ] ).then((data) => {
+             strangerThings.addrole(data.title, data.salary, data.department_id)
+        console.log("new role created ")
+
+        loadQ()
+    })
+
+}
+
+
+
 
 // what would you like to do?
     // View all employees
