@@ -30,7 +30,7 @@ async function loadQ() {
         ]).then(async (data) => {
             switch (data.action) {
                 case "View all employees":
-                    strangerThings.viewEmploy()
+                    await strangerThings.viewEmploy()
                     loadQ()
                     break
                 case "Add employee":
@@ -47,7 +47,7 @@ async function loadQ() {
                     addRole()
                     break
                 case "View all departments":
-                    strangerThings.viewDept()
+                   await strangerThings.viewDept()
                     loadQ()
                     break
                 case "Add department":
@@ -63,7 +63,7 @@ async function loadQ() {
 
 
 
-function addEmployee() {
+async function addEmployee() {
     inquirer
         .prompt([
             {
@@ -87,14 +87,16 @@ function addEmployee() {
                 massage: "What is the manager id?"
             },
         ]).then((data) => {
-            strangerThings.addEmplpy(data.firstname, data.lastname, data.roleid, data.managerid)
+            await strangerThings.addEmplpy(data.firstname, data.lastname, data.roleid, data.managerid)
             console.log("new employee created ")
 
             loadQ()
         })
 }
 
-function updateEmpRole() {
+async function updateEmpRole() {
+    const roletChoice = await strangerThings.getRoles()
+    const employChoice = await strangerThings.getEmployees()
     inquirer
         .prompt([
             {
@@ -105,7 +107,7 @@ function updateEmpRole() {
             {
                 type: "input",
                 name: "updateRole", //list
-                massage: "What is the emploees new role?"
+                massage: "What is the employees new role?"
             },
         ]).then((data) => {
             strangerThings.updateRole(date.whichEmployee, data.updateRole)
@@ -115,7 +117,9 @@ function updateEmpRole() {
         })
 }
 
-function addRole() {
+async function addRole() {
+    const departmentChoice = await strangerThings.getDepartments()
+    console.log(departmentChoice)
     inquirer
         .prompt([
             {
@@ -129,12 +133,13 @@ function addRole() {
                 message: "What is the salary for the role?"
             },
             {
-                type: "input",
+                type: "list",
                 name: "department_id",
-                message: "What is the department for the role?" //list
+                message: "What is the department for the role?",
+                choices: departmentChoice
             },
-        ]).then((data) => {
-            strangerThings.addRole(data.title, data.salary, data.department_id)
+        ]).then(async (data) => {
+           await strangerThings.addRole(data.title, data.salary, data.department_id)
             console.log("new role created ")
 
             loadQ()
@@ -142,7 +147,7 @@ function addRole() {
 
 }
 
-function addDepartment() {
+async function addDepartment() {
     inquirer
         .prompt([
             {
@@ -151,7 +156,7 @@ function addDepartment() {
                 message: "What is the  name of the department?"
             },
         ]).then((data) => {
-            strangerThings.addDept(data.department_name)
+            await strangerThings.addDept(data.department_name)
             console.log("new role created ")
 
             loadQ()
