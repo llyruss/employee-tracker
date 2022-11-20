@@ -15,6 +15,7 @@ class Stranger {
         const query = "select * from employee_role"
         const [rows, fields] = await this.connection.execute(query)
         console.table(rows)
+       
     }
 
     async viewEmploy(){

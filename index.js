@@ -28,7 +28,7 @@ async function loadQ() {
                     "View all roles", "Add role", "View all departments", "Add department", "quit"],
             },
         ]).then(async (data) => {
-            switch (data.aciton) {
+            switch (data.action) {
                 case "View all employees":
                     strangerThings.viewEmploy()
                     loadQ()
@@ -40,7 +40,7 @@ async function loadQ() {
                     updateEmpRole()
                     break
                 case "View all roles":
-                    strangerThings.viewRoles()
+                   await strangerThings.viewRoles()
                     loadQ()
                     break
                 case "Add role":
@@ -156,7 +156,6 @@ function addDepartment() {
 
             loadQ()
         })
-
 }
 
 init()
