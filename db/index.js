@@ -23,15 +23,15 @@ class Stranger {
         console.table(rows)
     }
 
-    async addDept(newDept){
-        const query = `INSERT INTO department (department_name) VALUES(${newDept});`
+    async addDept(department_name){
+        const query = `INSERT INTO department (department_name) VALUES(${department_name});`
         await this.connection.execute(query)
         console.log("new department created")
         
     }
 
-    async addRole(newRole){
-        const query = `INSERT INTO employee_role (title, salary, department_id) VALUES (${newRole});`
+    async addRole(title, salary, department_id){
+        const query = `INSERT INTO employee_role (title, salary, department_id) VALUES (${title}, ${salary}, ${department_id});`
         await this.connection.execute(query)
         console.log("new role created")
     }
