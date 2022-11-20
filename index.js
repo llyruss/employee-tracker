@@ -1,12 +1,11 @@
 const mysql = require('mysql2');
-const console_table = require("console.table")
+const inquirer = require("inquuirer")
+const console_table = require("console.table");
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'employees_db',
-    password : 'codingiskewl'
-})
+const Stranger = require("./db/index.js");
+const connection = require("./db/connections");
+
+const strangerThings = new Stranger(connection)
 
 
     
