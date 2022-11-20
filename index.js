@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const inquirer = require("inquuirer")
+const inquirer = require("inquirer")
 const console_table = require("console.table");
 
 const Stranger = require("./db/index.js");
@@ -7,137 +7,159 @@ const connection = require("./db/connections");
 const { allowedNodeEnvironmentFlags } = require('process');
 const { doesNotMatch } = require('assert');
 
-const strangerThings = new Stranger(connection())
+let strangerThings
 
-async function init(){
-    const newConnection = await connection()
-    const strangerThings = new Stranger(newConnection)
 
-    
+
+async function init() {
+    let newConnection = await connection()
+    strangerThings = new Stranger(newConnection)
+    loadQ()
 }
 
-function loadQ(){
+async function loadQ() {
     inquirer
-    .prompt([
-        {
-          type: 'list',
-          name: 'action',
-          message: 'What would you like to do?', 
-          choices: ["View all employees", "Add employee", "Update employee role",
+        .prompt([
+            {
+                type: 'list',
+                name: 'action',
+                message: 'What would you like to do?',
+                choices: ["View all employees", "Add employee", "Update employee role",
                     "View all roles", "Add role", "View all departments", "Add department", "quit"],
-        },
-      ]).then((data)=>{
-        switch(data.aciton){
-            case "View all employees":
-                strangerThings.viewEmploy()
-                loadQ()
-                break
-            case "Add employee": 
-                addEmployee()
-                break
-            case "Update employee role":
-                updateEmpRole()
-                break
-            case "View all roles":
-                strangerThings.viewRoles()
-                loadQ()
-                break
-            case "Add role":
-                addRole()
-                break
-            case "View all departments":
-                strangerThings.viewDept()
-                loadQ()
-                break
-            case "Add department":
-                addDepartment()
-                break
-            case "quit":
-               //unlink db
-        }
-      }) 
+            },
+        ]).then(async (data) => {
+            switch (data.aciton) {
+                case "View all employees":
+                    strangerThings.viewEmploy()
+                    loadQ()
+                    break
+                case "Add employee":
+                    addEmployee()
+                    break
+                case "Update employee role":
+                    updateEmpRole()
+                    break
+                case "View all roles":
+                    strangerThings.viewRoles()
+                    loadQ()
+                    break
+                case "Add role":
+                    addRole()
+                    break
+                case "View all departments":
+                    strangerThings.viewDept()
+                    loadQ()
+                    break
+                case "Add department":
+                    addDepartment()
+                    break
+                case "quit":
+                    let myConnection = await connection()
+                    myConnection.end()
+            }
+        })
 
 }
 
-function addEmployee(){
+
+
+function addEmployee() {
     inquirer
-    .prompt([
-        {
-           type: "input" ,
-           name: "firstname",
-           message: "What is the first name?"
-        },
-        {
-            type: "input",
-            name: "lastname",
-            message: "What is the last name?"
-        },
-        {
-            type: "input",
-            name: "roleid",
-            message: "What is the role id?" //list
-        },
-        {
-            type: "input",
-            name: "manageridid", //list
-            massage: "What is the manager id?"
-        },
-    ] ).then((data) => {
-             strangerThings.addEmplpy(data.firstname, data.lastname, data.roleid, data.managerid)
-        console.log("new employee created ")
+        .prompt([
+            {
+                type: "input",
+                name: "firstname",
+                message: "What is the first name?"
+            },
+            {
+                type: "input",
+                name: "lastname",
+                message: "What is the last name?"
+            },
+            {
+                type: "input",
+                name: "roleid",
+                message: "What is the role id?" //list
+            },
+            {
+                type: "input",
+                name: "manageridid", //list
+                massage: "What is the manager id?"
+            },
+        ]).then((data) => {
+            strangerThings.addEmplpy(data.firstname, data.lastname, data.roleid, data.managerid)
+            console.log("new employee created ")
 
-        loadQ()
-    })
+            loadQ()
+        })
 }
 
-function updateEmpRole(){
+function updateEmpRole() {
     inquirer
-    .prompt([
-        {
-           type: "list" ,
-           name: "whichEmployee", //list
-           message: "Which eployees role do you want to update?"
-        },
-        {
-            type: "input",
-            name: "updateRole", //list
-            massage: "What is the emploees new role?"
-        },
-    ] ).then((data) => {
-        strangerThings.updateRole(date.whichEmployee, data.updateRole)
-        console.log("role updated")
+        .prompt([
+            {
+                type: "list",
+                name: "whichEmployee", //list
+                message: "Which eployees role do you want to update?"
+            },
+            {
+                type: "input",
+                name: "updateRole", //list
+                massage: "What is the emploees new role?"
+            },
+        ]).then((data) => {
+            strangerThings.updateRole(date.whichEmployee, data.updateRole)
+            console.log("role updated")
 
-        loadQ()
-    })
+            loadQ()
+        })
 }
 
-function addRole(){
+function addRole() {
     inquirer
-    .prompt([
-        {
-           type: "input" ,
-           name: "title",
-           message: "What is the  name of the role?"
-        },
-        {
-            type: "input",
-            name: "salary",
-            message: "What is the salary for the role?"
-        },
-        {
-            type: "input",
-            name: "department_id",
-            message: "What is the department for the role?" //list
-        },
-    ] ).then((data) => {
-             strangerThings.addrole(data.title, data.salary, data.department_id)
-        console.log("new role created ")
+        .prompt([
+            {
+                type: "input",
+                name: "title",
+                message: "What is the  name of the role?"
+            },
+            {
+                type: "input",
+                name: "salary",
+                message: "What is the salary for the role?"
+            },
+            {
+                type: "input",
+                name: "department_id",
+                message: "What is the department for the role?" //list
+            },
+        ]).then((data) => {
+            strangerThings.addRole(data.title, data.salary, data.department_id)
+            console.log("new role created ")
 
-        loadQ()
-    })
+            loadQ()
+        })
 
 }
 
+function addDepartment() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "department_name",
+                message: "What is the  name of the department?"
+            },
+        ]).then((data) => {
+            strangerThings.addDept(data.department_name)
+            console.log("new role created ")
+
+            loadQ()
+        })
+
+}
+
+init()
 
 
 
@@ -151,7 +173,7 @@ function addRole(){
     // add dept
 
 //add employee
-    //what is first name, 
+    //what is first name,
     //what is last name
     //what is  role id
     //what is  manager id
@@ -183,8 +205,8 @@ function addRole(){
 //add department
     //what is the department name?
 
-   
-    
+
+
 
 
 
