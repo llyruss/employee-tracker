@@ -23,26 +23,26 @@ class Stranger {
         console.table(rows)
     }
 
-    addDept(newDept){
+    async addDept(newDept){
         const query = `INSERT INTO department (department_name) VALUES(${newDept});`
         await this.connection.execute(query)
         console.log("new department created")
         
     }
 
-    addRole(newRole){
+    async addRole(newRole){
         const query = `INSERT INTO employee_role (title, salary, department_id) VALUES (${newRole});`
         await this.connection.execute(query)
         console.log("new role created")
     }
 
-    addEmplpy(newEmploy){
-        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(${newEmploy});`
+    async addEmplpy(first_name, last_name, role_id, manager_id){
+        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(${first_name}, ${last_name}, ${role_id}, ${manager_id});`
         await this.connection.execute(query)
         console.log("new employee created")
     }
 
-    updateRole(updateRole, employID){
+    async updateRole(updateRole, employID){
         const query = `UPDATE employee SET role_id = '${updateRole}', WHERE id = ${employID};`
         await this.connection.execute(query)
         console.log("role updated")

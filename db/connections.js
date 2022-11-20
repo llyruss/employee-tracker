@@ -12,4 +12,4 @@ async function setup() {
     return connection;
 }
 
-module.exports=setup()
+module.exports=setup
