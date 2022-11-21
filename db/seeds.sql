@@ -14,11 +14,11 @@ VALUES ('Dungeon_Master', 50000.00, 1),
        ('Police Officer', 25000, 2),
        ('Secretary', 20000.00, 2),
        ('Ruler', 50000, 3),
-       ('Intern', 10000, 3),
+       ('Intern(Upsidedown)', 10000, 3),
        ('Minion', 15000.00, 3),
        ('Editor', 22000.00, 4),
        ('Photographer', 20000.00, 4),
-       ('Intern', 10000.00, 4);
+       ('Intern(journalism)', 10000.00, 4);
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
@@ -27,8 +27,8 @@ VALUES ('Eddie', 'Munson', 1, NULL ),
        ('Mike', 'Wheeler', 3, 1),
        ('Jim', 'Hopper', 4, NULL),
        ('Phil', 'Callahan', 5, 4),
-       ('Florence', NULL, 6, 4),
-       ('One', NULL, 7, NULL),
+       ('Florence', "Machine", 6, 4),
+       ('Henry', 'Kreel', 7, NULL),
        ('Dart', 'Demogorgon', 8, 7),
        ('Demogorgon', 'Smith', 9, 7),
        ('Tom', 'Holloway', 10, NULL),

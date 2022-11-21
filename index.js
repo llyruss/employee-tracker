@@ -4,15 +4,14 @@ const console_table = require("console.table");
 
 const Stranger = require("./db/index.js");
 const connection = require("./db/connections");
-const { allowedNodeEnvironmentFlags } = require('process');
-const { doesNotMatch } = require('assert');
+
 
 let strangerThings
 
 
 
 async function init() {
-    let newConnection = await connection()
+    let newConnection = await connection
     strangerThings = new Stranger(newConnection)
     loadQ()
 }
@@ -54,7 +53,7 @@ async function loadQ() {
                     addDepartment()
                     break
                 case "quit":
-                    let myConnection = await connection()
+                    let myConnection = await connection
                     myConnection.end()
             }
         })
@@ -64,6 +63,8 @@ async function loadQ() {
 
 
 async function addEmployee() {
+    const roletChoice = await strangerThings.getRoles()
+    const employChoice = await strangerThings.getEmployees()
     inquirer
         .prompt([
             {
@@ -77,16 +78,18 @@ async function addEmployee() {
                 message: "What is the last name?"
             },
             {
-                type: "input",
+                type: "list",
                 name: "roleid",
-                message: "What is the role id?" //list
+                message: "What is the employees role?", //list
+                choices: roletChoice
             },
             {
-                type: "input",
-                name: "manageridid", //list
-                massage: "What is the manager id?"
+                type: "list",
+                name: "managerid",
+                message: "Who is their manager?",
+                choices: employChoice
             },
-        ]).then((data) => {
+        ]).then(async (data) => {
             await strangerThings.addEmplpy(data.firstname, data.lastname, data.roleid, data.managerid)
             console.log("new employee created ")
 
@@ -95,22 +98,24 @@ async function addEmployee() {
 }
 
 async function updateEmpRole() {
-    const roletChoice = await strangerThings.getRoles()
+    const roleChoice = await strangerThings.getRoles()
     const employChoice = await strangerThings.getEmployees()
     inquirer
         .prompt([
             {
                 type: "list",
                 name: "whichEmployee", //list
-                message: "Which eployees role do you want to update?"
+                message: "Which eployees role do you want to update?",
+                choices: employChoice
             },
             {
-                type: "input",
+                type: "list",
                 name: "updateRole", //list
-                massage: "What is the employees new role?"
+                message: "What is the employees new role?",
+                choices: roleChoice
             },
-        ]).then((data) => {
-            strangerThings.updateRole(date.whichEmployee, data.updateRole)
+        ]).then(async (data) => {
+           await strangerThings.updateRole(data.whichEmployee, data.updateRole)
             console.log("role updated")
 
             loadQ()
@@ -119,7 +124,6 @@ async function updateEmpRole() {
 
 async function addRole() {
     const departmentChoice = await strangerThings.getDepartments()
-    console.log(departmentChoice)
     inquirer
         .prompt([
             {
@@ -155,9 +159,9 @@ async function addDepartment() {
                 name: "department_name",
                 message: "What is the  name of the department?"
             },
-        ]).then((data) => {
+        ]).then(async (data) => {
             await strangerThings.addDept(data.department_name)
-            console.log("new role created ")
+            console.log("new dept created ")
 
             loadQ()
         })
